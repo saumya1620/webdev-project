@@ -3,11 +3,10 @@ const bcrypt = require("bcrypt");
 const generateToken = require("../utils/generateToken");
 const validator = require("validator");
 
-// REGISTER USER
 const registerUser = async (req, res) => {
-  const { firstName, lastName, emailId, password } = req.body;
+  const { firstName, lastName, emailId, password, role } = req.body;
 
-  if (!firstName || !emailId || !password) {
+  if (!firstName || !emailId || !password || !role) {
     return res.status(400).json({ message: "Please add all mandatory fields" });
   }
 
@@ -32,6 +31,7 @@ const registerUser = async (req, res) => {
       lastName,
       emailId,
       password: hashedPassword,
+      role
     });
 
     const token = generateToken(newUser);
@@ -45,7 +45,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// LOGIN USER
 const loginUser = async (req, res) => {
   const { emailId, password } = req.body;
 
@@ -74,7 +73,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-// GET CURRENT USER PROFILE
+
 const getcurrent = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");

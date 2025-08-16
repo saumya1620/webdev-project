@@ -25,4 +25,16 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+const rolecheck = (...roles) =>
+{
+  return (req,res, next) =>
+  {
+    if(!roles.includes(req.user.role))
+    {
+      return res.status(403).json({message : "user do not have permission"})
+    }
+    next();
+  }
+}
+
+module.exports = {authMiddleware , rolecheck};

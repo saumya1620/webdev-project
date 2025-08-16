@@ -1,5 +1,5 @@
 const Team = require('../models/teamModel');
-import { parse } from './../node_modules/dotenv/lib/main.d';
+//import { parse } from './../node_modules/dotenv/lib/main.d';
 const User = require('../models/userModel');
 const Project = require('../models/projectModel');
 const mongoose = require('mongoose');
