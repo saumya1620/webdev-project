@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { createTeam } = require('../controllers/teamController');
+const { createTeam, addMembers } = require('../controllers/teamController');
 
 
-router.post('/create', createTeam);
+router.post('/teams', createTeam);
+router.post('/teams/:id/members', addMembers);
 
 module.exports = router;
