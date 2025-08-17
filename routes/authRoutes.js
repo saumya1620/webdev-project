@@ -9,6 +9,6 @@ router.post("/register", registerUser);
 
 router.post("/login", loginUser);
 
-router.get("/info", authMiddleware, getcurrent);
+router.get("/info",  getcurrent);
 
 module.exports = router;
