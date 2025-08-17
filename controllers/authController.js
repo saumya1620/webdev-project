@@ -6,7 +6,7 @@ const validator = require("validator");
 const registerUser = async (req, res) => {
   const { firstName, lastName, emailId, password, role } = req.body;
 
-  if (!firstName || !emailId || !password || !role) {
+  if (!firstName || !emailId || !password) {
     return res.status(400).json({ message: "Please add all mandatory fields" });
   }
 
@@ -39,6 +39,7 @@ const registerUser = async (req, res) => {
     return res.status(201).json({
       message: "User added successfully",
       token,
+      newUser
     });
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -76,7 +77,7 @@ const loginUser = async (req, res) => {
 
 const getcurrent = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select("emailId");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
