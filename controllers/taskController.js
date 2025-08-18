@@ -1,6 +1,6 @@
 const Task = require("../models/taskModel");
 const Project = require("../models/projectModel");
-
+const { logAction } = require("./activityController")
 const createTask = async(req,res)=>
 {
     const {title , description , projectId , assignedUser } = req.body;
@@ -16,6 +16,7 @@ const createTask = async(req,res)=>
     }
     const task = await Task.create({title, description , project:projectId , assignedUser:assignedUser || [],});
     await Project.findByIdAndUpdate(projectId , { $push : {tasks : task._id}});
+    await logAction("Task Created", req.user._id ,projectId,task._id);
     return res.status(201).json({message : "created "});
 };
 
@@ -37,6 +38,10 @@ const updateTaskStatus = async(req,res) =>
     {
         return res.status(404).json({message : "task not found"});
     }
+    if(updatedTask)
+    {
+        await logAction(`Task status changed to ${status}`, req.user._id,updatedTask.project,updatedTask._id)
+    }
     return res.status(200).json({message : "task status updated" , task : updatedTask});
 }
 
@@ -45,20 +50,24 @@ const assignTask = async(req,res)=>
     const {taskId} = req.params;
     const {userIds} = req.body;
 
-    if(!userIds || !Array.isArray(userIds))
+    if(!userIds.length===0 || !Array.isArray(userIds))
     {
         return res.status(400).json({message : "provide users"});
     }
     const updatedTask = await Task.findOneAndUpdate(
-        taskId,
+        {_id :taskId},
         {$addToSet : { assignedUsers : {$each : userIds}}},
         {new : true}
-    ).populate("assigned to", "firstName lastName emailId");
+    ).populate("assignedUsers", "firstName lastName emailId");
 
     if(!updatedTask)
     {
         return res.status(404).json({message : "task not found"});
 
+    }
+    if(updatedTask)
+    {
+        await logAction("user assigned to task",req.user._id,updatedTask.project,updatedTask._id)
     }
     return res.status(200).json({message : "user assigned" , task:updatedTask});
 
@@ -68,7 +77,7 @@ const assignTask = async(req,res)=>
 const getTasks = async(req,res)=>
 {
     const {projectId} = req.params;
-    const tasks = await Task.find({project:projectId}).populate("assigned","firstName lastName emailId");
+    const tasks = await Task.find({project:projectId}).populate("assignedUsers","firstName lastName emailId");
     return res.status(200).json({ tasks });
 }
 
