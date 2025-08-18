@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRegister = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
-const teamRoutes = require('./routes/teamRoutes')
+const teamRoutes = require('./routes/teamRoutes');
+const taskRoutes = require('./routes/taskroutes');
+const activitylogs = require('./routes/ActivityLogRouter');
+
 dotenv.config(); 
 
 const app = express();
@@ -18,6 +21,9 @@ app.use(express.json());
 app.use('/api/user' , userRegister);
 app.use('/api/teams', teamRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/tasks',taskRoutes);
+app.use('/api/logs',activitylogs);
+
 
 app.get('/', (req, res) => {
   res.send('Server is running');
