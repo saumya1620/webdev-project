@@ -17,7 +17,7 @@ const createTask = async(req,res)=>
     const task = await Task.create({title, description , project:projectId , assignedUsers:assignedUsers || [],});
     await Project.findByIdAndUpdate(projectId , { $push : {tasks : task._id}});
     await logAction("Task Created", req.user._id ,projectId,task._id);
-    return res.status(201).json({message : "created "});
+    return res.status(201).json({message : "created",task});
 };
 
 const updateTaskStatus = async(req,res) =>
@@ -81,4 +81,18 @@ const getTasks = async(req,res)=>
     return res.status(200).json({ tasks });
 }
 
-module.exports = { createTask , updateTaskStatus , assignTask , getTasks };
+const getStatus = async(req,res)=>
+{
+    const {taskId} = req.params;
+    const task = await Task.findById(taskId).select("status");
+    if(!task)
+    {
+        return res.status(404).json({message : "task not found"});
+
+    }
+    return res.status(200).json({
+        message : `status for ${taskId}`,
+        status : task.status
+    })
+}
+module.exports = { createTask , updateTaskStatus , assignTask , getTasks, getStatus };
