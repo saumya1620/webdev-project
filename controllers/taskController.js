@@ -3,7 +3,7 @@ const Project = require("../models/projectModel");
 const { logAction } = require("./activityController")
 const createTask = async(req,res)=>
 {
-    const {title , description , projectId , assignedUser } = req.body;
+    const {title , description , projectId , assignedUsers } = req.body;
     if(!title || !projectId)
     {
         return res.status(400).json({message : "title and project ID required"});
@@ -14,7 +14,7 @@ const createTask = async(req,res)=>
     {
         return res.status(404).json({message : "project not found"});
     }
-    const task = await Task.create({title, description , project:projectId , assignedUser:assignedUser || [],});
+    const task = await Task.create({title, description , project:projectId , assignedUsers:assignedUsers || [],});
     await Project.findByIdAndUpdate(projectId , { $push : {tasks : task._id}});
     await logAction("Task Created", req.user._id ,projectId,task._id);
     return res.status(201).json({message : "created "});
