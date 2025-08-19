@@ -1,4 +1,5 @@
 const Team = require('../models/teamModel');
+const User = require('../models/userModel');
 const mongoose = require('mongoose');
 
 // Create a new team
@@ -13,10 +14,15 @@ const createTeam = async (req, res) => {
             creator: new mongoose.Types.ObjectId(creator),
             members: members.map(member => new mongoose.Types.ObjectId(member)),
         });
+         await User.findByIdAndUpdate(creator,{
+            $set: {role: "Project Manager"},
+        })
         return res.status(201).json({
             message: "Team created successfully",
             team
         });
+
+       
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }

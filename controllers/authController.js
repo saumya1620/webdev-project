@@ -66,9 +66,9 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
-    const token = generateToken(user);
-
+    const token = generateToken(user
     return res.status(200).json({ message: "Logged in", token, user});
+
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -77,7 +77,7 @@ const loginUser = async (req, res) => {
 
 const getcurrent = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("emailId");
+    const user = await User.findById(req.user._id).select("emailId");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
