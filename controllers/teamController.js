@@ -1,4 +1,5 @@
 const Team = require('../models/teamModel');
+const User = require('../models/userModel');
 const mongoose = require('mongoose');
 
 // Create a new team
@@ -13,10 +14,15 @@ const createTeam = async (req, res) => {
             creator: new mongoose.Types.ObjectId(creator),
             members: members.map(member => new mongoose.Types.ObjectId(member)),
         });
+         await User.findByIdAndUpdate(creator,{
+            $set: {role: "Project Manager"},
+        })
         return res.status(201).json({
             message: "Team created successfully",
             team
         });
+
+       
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
@@ -27,15 +33,15 @@ const addMembers = async (req, res) => {
     const { members } = req.body;
     const teamId = req.params.id;
     if (!teamId || !Array.isArray(members) || members.length === 0) {
-        return res.status(400).json({ message: "Please select the team and members" });
+        return res.status(400).json({ 
+            message: "Please select the team and members" 
+        });
     }
     try {
         const team = await Team.findById(teamId);
         if (!team) {
             return res.status(404).json({ message: "Team not found" });
         }
-        const existingMembers = team.members.map(member => member.toString());
-        const newMembers = members.filter(member => !existingMembers.includes(member));
         team.members.push(...members);
         await team.save();
         return res.status(200).json({

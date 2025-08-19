@@ -3,7 +3,7 @@ const activityLogSchema = new mongoose.Schema({
     action: { type: String, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     task: { type: mongoose.Schema.Types.ObjectId, ref: 'Task' },
-    project : { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required:true}
-    
-},{timestamp:  true });
+   project:{type:mongoose.Schema.Types.ObjectId , ref : 'Project', required : true}
+},{timestamps: true});
 module.exports = mongoose.model('ActivityLog', activityLogSchema);
+
