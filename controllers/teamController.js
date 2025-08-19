@@ -33,15 +33,15 @@ const addMembers = async (req, res) => {
     const { members } = req.body;
     const teamId = req.params.id;
     if (!teamId || !Array.isArray(members) || members.length === 0) {
-        return res.status(400).json({ message: "Please select the team and members" });
+        return res.status(400).json({ 
+            message: "Please select the team and members" 
+        });
     }
     try {
         const team = await Team.findById(teamId);
         if (!team) {
             return res.status(404).json({ message: "Team not found" });
         }
-        const existingMembers = team.members.map(member => member.toString());
-        const newMembers = members.filter(member => !existingMembers.includes(member));
         team.members.push(...members);
         await team.save();
         return res.status(200).json({

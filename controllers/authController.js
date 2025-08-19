@@ -66,7 +66,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
-    const token = generateToken(user
+    const token = generateToken(user)
     return res.status(200).json({ message: "Logged in", token, user});
 
   } catch (err) {
