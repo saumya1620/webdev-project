@@ -33,6 +33,7 @@ PORT=5000
 ### Run the project:
 ```
 npm run dev
+
 ```
 
 ## API Endpoints
@@ -57,7 +58,7 @@ npm run dev
 - `GET api/tasks/project/:projectId` → Get all tasks for project
 
 ## Project Structure
-
+```
 webdev-project/
 |── config/          # database.js for databse connection
 │── controllers/     # Logic for auth, team, project, task
@@ -68,7 +69,7 @@ webdev-project/
 │── index.js         # App entry point
 │── .env             # Environment variables
 │── README.md        # Documentation
-
+```
 ## Future Enhancements
 - Add notifications for task assignment
 - Implement real-time updates using Socket.io
