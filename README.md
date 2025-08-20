@@ -18,10 +18,10 @@
 ## Installation
 
 ### Clone the repo:
-   ```git clone https://github.com/your-username/project-management-api.git```
+   ```git clone https://github.com/saumya1620/webdev-project.git```
 ### Install dependencies:
 ```
-cd project-management-api
+cd webdev-project
 npm install
 ```
 ### Create a .env file in the root with:
